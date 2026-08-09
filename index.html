@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cozy Corner</title>
+
+    <style>
+        :root {
+            --pink: #ff9edc;
+            --pink-light: #ffc7eb;
+            --purple: #bda7ff;
+            --text-main: #ffffff;
+            --text-soft: #c9c7dc;
+            --text-muted: #8f8ca8;
+            --online: #7ee7a8;
+            --border: rgba(255, 174, 229, 0.18);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 30px;
+
+            font-family:
+                Inter,
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+            color: var(--text-main);
+
+            background:
+                radial-gradient(
+                    circle at 20% 15%,
+                    rgba(139, 102, 255, 0.20),
+                    transparent 35%
+                ),
+                radial-gradient(
+                    circle at 80% 80%,
+                    rgba(255, 120, 210, 0.16),
+                    transparent 35%
+                ),
+                linear-gradient(
+                    145deg,
+                    #070918,
+                    #0c0e24 50%,
+                    #090a19
+                );
+
+            overflow-x: hidden;
+        }
+
+        /* Sterne */
+        body::before,
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+
+            background-image:
+                radial-gradient(
+                    circle,
+                    rgba(255,255,255,.75) 1px,
+                    transparent 1px
+                ),
+                radial-gradient(
+                    circle,
+                    rgba(255,174,229,.5) 1px,
+                    transparent 1px
+                );
+
+            background-size:
+                95px 95px,
+                145px 145px;
+
+            background-position:
+                10px 20px,
+                55px 75px;
+
+            opacity: .28;
+        }
+
+        body::after {
+            opacity: .12;
+            transform: scale(1.4);
+        }
+
+        /* Widget */
+        .cozy-widget {
+            position: relative;
+
+            width: min(430px, 100%);
+
+            padding: 30px;
+
+            border: 1px solid var(--border);
+            border-radius: 28px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(26, 27, 57, .96),
+                    rgba(11, 13, 32, .96)
+                );
+
+            box-shadow:
+                0 25px 80px rgba(0, 0, 0, .55),
+                0 0 60px rgba(205, 137, 255, .12);
+
+            overflow: hidden;
+
+            backdrop-filter: blur(18px);
+
+            animation: widgetAppear .7s ease both;
+        }
+
+        @keyframes widgetAppear {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(.97);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Glow */
+        .glow {
+            position: absolute;
+
+            width: 220px;
+            height: 220px;
+
+            border-radius: 50%;
+
+            background: rgba(202, 133, 255, .12);
+
+            filter: blur(55px);
+
+            pointer-events: none;
+        }
+
+        .glow.one {
+            top: -110px;
+            left: -90px;
+        }
+
+        .glow.two {
+            right: -120px;
+            bottom: -100px;
+
+            background: rgba(255, 137, 216, .10);
+        }
+
+        /* Schließen */
+        .close-button {
+            position: absolute;
+
+            top: 15px;
+            right: 15px;
+
+            width: 34px;
+            height: 34px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 50%;
+
+            background: rgba(255,255,255,.04);
+
+            color: var(--text-soft);
+
+            font-size: 18px;
+
+            cursor: pointer;
+
+            transition:
+                background .25s ease,
+                color .25s ease,
+                transform .25s ease;
+        }
+
+        .close-button:hover {
+            background: rgba(255, 158, 220, .14);
+            color: white;
+            transform: rotate(90deg);
+        }
+
+        /* GIF */
+        .server-image-wrapper {
+            position: relative;
+
+            width: 120px;
+            height: 120px;
+
+            margin: 5px auto 20px;
+        }
+
+        .server-image-wrapper::before {
+            content: "";
+
+            position: absolute;
+            inset: -10px;
+
+            border-radius: 50%;
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(255, 158, 220, .35),
+                    transparent 65%
+                );
+
+            filter: blur(12px);
+
+            animation: imageGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes imageGlow {
+            0%, 100% {
+                transform: scale(.95);
+                opacity: .65;
+            }
+
+            50% {
+                transform: scale(1.08);
+                opacity: 1;
+            }
+        }
+
+        .server-image {
+            position: relative;
+
+            width: 120px;
+            height: 120px;
+
+            object-fit: cover;
+
+            border-radius: 50%;
+
+            border: 2px solid rgba(255, 190, 235, .55);
+
+            box-shadow:
+                0 0 25px rgba(255, 142, 220, .25),
+                0 0 50px rgba(178, 145, 255, .14);
+        }
+
+        /* Servername */
+        .server-name {
+            position: relative;
+
+            text-align: center;
+
+            font-size: 30px;
+            font-weight: 750;
+
+            letter-spacing: -.5px;
+
+            text-shadow:
+                0 0 25px rgba(255, 158, 220, .25);
+        }
+
+        .server-name::after {
+            content: "✦";
+
+            display: block;
+
+            margin-top: 7px;
+
+            color: var(--pink);
+
+            font-size: 13px;
+
+            opacity: .8;
+        }
+
+        /* Über den Server */
+        .about {
+            position: relative;
+
+            margin-top: 25px;
+            padding: 20px;
+
+            border-radius: 19px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,.045),
+                    rgba(255,255,255,.018)
+                );
+
+            border: 1px solid rgba(255,255,255,.06);
+        }
+
+        .about-title {
+            margin-bottom: 9px;
+
+            color: var(--pink-light);
+
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .about-text {
+            color: var(--text-soft);
+
+            font-size: 14px;
+            line-height: 1.65;
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+
+            gap: 12px;
+
+            margin-top: 15px;
+        }
+
+        .stat {
+            padding: 15px;
+
+            text-align: center;
+
+            border-radius: 17px;
+
+            background: rgba(255,255,255,.035);
+
+            border: 1px solid rgba(255,255,255,.055);
+        }
+
+        .stat-number {
+            display: block;
+
+            margin-bottom: 4px;
+
+            font-size: 20px;
+            font-weight: 750;
+
+            color: white;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+
+            font-size: 11px;
+
+            text-transform: uppercase;
+            letter-spacing: .7px;
+        }
+
+        .online-dot {
+            display: inline-block;
+
+            width: 8px;
+            height: 8px;
+
+            margin-right: 5px;
+
+            border-radius: 50%;
+
+            background: var(--online);
+
+            box-shadow:
+                0 0 10px rgba(126, 231, 168, .65);
+        }
+
+        /* Beitreten */
+        .join-button {
+            position: relative;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            width: 100%;
+
+            margin-top: 18px;
+            padding: 16px 20px;
+
+            border: 1px solid rgba(255, 187, 235, .35);
+            border-radius: 17px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(255, 146, 216, .95),
+                    rgba(175, 139, 255, .95)
+                );
+
+            color: white;
+
+            font-size: 14px;
+            font-weight: 800;
+
+            text-decoration: none;
+
+            box-shadow:
+                0 8px 30px rgba(229, 135, 225, .20);
+
+            transition:
+                transform .25s ease,
+                box-shadow .25s ease,
+                filter .25s ease;
+
+            overflow: hidden;
+        }
+
+        .join-button:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 12px 38px rgba(229, 135, 225, .32);
+
+            filter: brightness(1.08);
+        }
+
+        .join-button:active {
+            transform: translateY(0);
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 17px;
+
+            text-align: center;
+
+            color: var(--text-muted);
+
+            font-size: 11px;
+        }
+
+        /* Fehler */
+        .error {
+            display: none;
+
+            margin-top: 15px;
+            padding: 12px;
+
+            border-radius: 12px;
+
+            background: rgba(255, 90, 150, .08);
+
+            border: 1px solid rgba(255, 90, 150, .15);
+
+            color: #ffb4d9;
+
+            font-size: 12px;
+            line-height: 1.5;
+
+            text-align: center;
+        }
+
+        /* Mobile */
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+
+            .cozy-widget {
+                padding: 24px 20px;
+            }
+
+            .server-name {
+                font-size: 26px;
+            }
+
+            .server-image,
+            .server-image-wrapper {
+                width: 105px;
+                height: 105px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="cozy-widget" id="cozyWidget">
+
+        <div class="glow one"></div>
+        <div class="glow two"></div>
+
+        <!-- Schließen -->
+        <button
+            class="close-button"
+            id="closeButton"
+            aria-label="Widget schließen"
+        >
+            ×
+        </button>
+
+        <!-- DEIN GIF -->
+        <div class="server-image-wrapper">
+
+            <img
+                id="serverImage"
+                class="server-image"
+                src="692D62B3-7A6E-4250-8BAE-916AC7835037.gif"
+                alt="Cozy Corner"
+            >
+
+        </div>
+
+        <!-- Servername -->
+        <h1 class="server-name" id="serverName">
+            Cozy Corner
+        </h1>
+
+        <!-- Beschreibung -->
+        <section class="about">
+
+            <div class="about-title">
+                ✦ Über Cozy Corner
+            </div>
+
+            <p class="about-text">
+                Ein gemütlicher Ort zum Quatschen,
+                Spielen und gemeinsamen Abhängen.
+                Mach es dir gemütlich und schau gerne vorbei! ♡
+            </p>
+
+        </section>
+
+        <!-- Statistiken -->
+        <section class="stats">
+
+            <div class="stat">
+
+                <span
+                    class="stat-number"
+                    id="onlineCount"
+                >
+                    ...
+                </span>
+
+                <span class="stat-label">
+                    <span class="online-dot"></span>
+                    online
+                </span>
+
+            </div>
+
+            <div class="stat">
+
+                <span
+                    class="stat-number"
+                    id="memberCount"
+                >
+                    ...
+                </span>
+
+                <span class="stat-label">
+                    Mitglieder
+                </span>
+
+            </div>
+
+        </section>
+
+        <!-- Discord Beitreten -->
+        <a
+            id="joinButton"
+            class="join-button"
+            href="https://discord.gg/ZcKDK7NC7h"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            🌸 SERVER BEITRETEN
+        </a>
+
+        <div
+            class="error"
+            id="errorMessage"
+        >
+            Die Discord-Daten konnten momentan nicht
+            geladen werden.
+        </div>
+
+        <div class="footer">
+            ✦ Willkommen bei Cozy Corner ✦
+        </div>
+
+    </main>
+
+
+    <script>
+
+        /* =====================================================
+           DEINE DISCORD-DATEN
+           ===================================================== */
+
+        const DISCORD_SERVER_ID =
+            "1466753643943559200";
+
+        const DISCORD_INVITE =
+            "https://discord.gg/ZcKDK7NC7h";
+
+
+        /* =====================================================
+           ELEMENTE
+           ===================================================== */
+
+        const serverName =
+            document.getElementById("serverName");
+
+        const onlineCount =
+            document.getElementById("onlineCount");
+
+        const memberCount =
+            document.getElementById("memberCount");
+
+        const joinButton =
+            document.getElementById("joinButton");
+
+        const closeButton =
+            document.getElementById("closeButton");
+
+        const errorMessage =
+            document.getElementById("errorMessage");
+
+        const widget =
+            document.getElementById("cozyWidget");
+
+
+        /* =====================================================
+           DISCORD LINK
+           ===================================================== */
+
+        joinButton.href = DISCORD_INVITE;
+
+
+        /* =====================================================
+           DISCORD WIDGET API
+           ===================================================== */
+
+        const DISCORD_WIDGET_URL =
+            `https://discord.com/api/guilds/${DISCORD_SERVER_ID}/widget.json`;
+
+
+        /* =====================================================
+           DISCORD DATEN LADEN
+           ===================================================== */
+
+        async function loadDiscordData() {
+
+            try {
+
+                const response =
+                    await fetch(
+                        DISCORD_WIDGET_URL,
+                        {
+                            method: "GET",
+                            headers: {
+                                "Accept": "application/json"
+                            },
+                            cache: "no-store"
+                        }
+                    );
+
+
+                if (!response.ok) {
+                    throw new Error(
+                        "Discord API Fehler: " +
+                        response.status
+                    );
+                }
+
+
+                const data =
+                    await response.json();
+
+
+                /* Servername */
+
+                if (data.name) {
+
+                    serverName.textContent =
+                        data.name;
+                }
+
+
+                /* Online */
+
+                if (
+                    typeof data.presence_count ===
+                    "number"
+                ) {
+
+                    onlineCount.textContent =
+                        data.presence_count;
+
+                } else {
+
+                    onlineCount.textContent =
+                        "–";
+                }
+
+
+                /*
+                 * Discord liefert hier nicht
+                 * zuverlässig die Gesamtzahl aller
+                 * Servermitglieder.
+                 */
+
+                memberCount.textContent = "120+";
+
+
+                console.log(
+                    "Cozy Corner Discord Daten:",
+                    data
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "Discord Widget Fehler:",
+                    error
+                );
+
+                onlineCount.textContent = "–";
+                memberCount.textContent = "–";
+
+                errorMessage.style.display =
+                    "block";
+            }
+        }
+
+
+        /* =====================================================
+           SCHLIESSEN
+           ===================================================== */
+
+        closeButton.addEventListener(
+            "click",
+            function () {
+
+                widget.style.animation =
+                    "widgetDisappear .35s ease forwards";
+
+                setTimeout(
+                    function () {
+
+                        widget.style.display =
+                            "none";
+
+                    },
+                    350
+                );
+            }
+        );
+
+
+        /* =====================================================
+           SCHLIESS-ANIMATION
+           ===================================================== */
+
+        const animationStyle =
+            document.createElement("style");
+
+        animationStyle.textContent = `
+
+            @keyframes widgetDisappear {
+
+                from {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+
+                to {
+                    opacity: 0;
+                    transform: scale(.94);
+                }
+
+            }
+
+        `;
+
+        document.head.appendChild(
+            animationStyle
+        );
+
+
+        /* =====================================================
+           START
+           ===================================================== */
+
+        loadDiscordData();
+
+
+        /* =====================================================
+           AKTUALISIERUNG ALLE 60 SEKUNDEN
+           ===================================================== */
+
+        setInterval(
+            loadDiscordData,
+            60000
+        );
+
+    </script>
+
+</body>
+</html>
